@@ -2,13 +2,13 @@ import React, {useRef} from 'react';
 import {Swiper, SwiperSlide} from "swiper/react";
 import {Navigation} from "swiper";
 import "swiper/css";
+
 import Link from 'next/link'
 import Image from 'next/image'
 
 
 
 function PerView({items,spaceBetween,slidesPerView,extraClass='',arrows=false,isReload=false}) {
-    console.log(items);
     const leftArrow = useRef()
     const rightArrow = useRef()
     return (
@@ -32,8 +32,9 @@ function PerView({items,spaceBetween,slidesPerView,extraClass='',arrows=false,is
 
         >
             {items?.map((item) => (
-                <SwiperSlide key={item.id} className='h-full w-auto'>
-                    <Link href={`/movie/${item.id}`}><img src={`https://image.tmdb.org/t/p/original/${item.poster_path}`} alt={item.title} className='h-full' /></Link>
+                
+                <SwiperSlide key={item.id} className='h-full'>
+                    <Link href={`/movie/${item.id}`}><img src={`https://image.tmdb.org/t/p/original/${item.poster_path}`} alt={item.title} className='h-full w-auto object-cover' /></Link>
                 </SwiperSlide>
             ))}
 
@@ -42,8 +43,8 @@ function PerView({items,spaceBetween,slidesPerView,extraClass='',arrows=false,is
             {arrows && (
                 <div className='flex gap-6 container mx-auto mt-3'>
 
-                {/* <button ref={leftArrow}><Image  src="/carouse_left_arrow.svg" alt={'left arrow'}/></button> */}
-                {/* <button ref={rightArrow}><Image src="/carouse_right_arrow.svg" alt={'right arrow'}/></button> */}
+                <button ref={leftArrow}><Image  src="/carouse_left_arrow.svg" alt={'left arrow'} width={50} height={50}/></button>
+                <button ref={rightArrow}><Image src="/carouse_right_arrow.svg" alt={'right arrow'} width={50} height={50}/></button>
                 </div>
             )}
         </>
