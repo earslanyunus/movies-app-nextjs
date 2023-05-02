@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useSelector} from "react-redux";
-// import {getProfilePicture, signOut} from "../firebase/index.js";
+import {getProfilePicture, signOut} from "../firebase/index.js";
 import Button from "./Button.jsx";
 import { useRouter } from 'next/router'
 import Link from 'next/link.js';
@@ -11,36 +11,37 @@ import Image from 'next/image.js';
 function Navbar({setIsMenuOpen, isMenuOpen}) {
     const router = useRouter()
     const [profilePic, setProfilePic] = useState(null)
-    const isAuth= false
-    // const isAuth = useSelector(state => state.auth.isAuth)
-    // const user = useSelector(state => state.auth.user)
+    // const isAuth= false
+    const isAuth = useSelector(state => state.auth.isAuth)
+    const user = useSelector(state => state.auth.user)
     const [search, setSearch] = useState('')
-    // React.useEffect(() => {
-    //     if (user) {
-    //         getProfilePicture(user.uid).then((url) => {
-    //                 setProfilePic(url)
-    //             }
-    //         )
+    React.useEffect(() => {
+        if (user) {
+            getProfilePicture(user.uid).then((url) => {
+                    setProfilePic(url)
+                }
+            )
 
-    //     }
-    // }, [user])
+        }
+    }, [user])
     const buttonHandler = () => {
         router.push('/login')
-        setIsMenuOpen(false)
+        // setIsMenuOpen(false)
     }
     const menuButtonHandler = () => {
-        setIsMenuOpen(!isMenuOpen)
+        // setIsMenuOpen(!isMenuOpen)
     }
     const searchHandler = (e) => {
         setSearch(e.target.value)
     }
-    const searchButtonHandler = () => {
+    const searchButtonHandler = (e) => {
+        e.preventDefault()``
         router.push(`/search/${search}`)
-        setIsMenuOpen(false)
+        // setIsMenuOpen(false)
     }
     const navbtnClickedHandler = () => {
         if (isMenuOpen) {
-            setIsMenuOpen(false)
+            // setIsMenuOpen(false)
         }
     }
     return (
@@ -50,7 +51,7 @@ function Navbar({setIsMenuOpen, isMenuOpen}) {
                 {/*NAVBAR TOP AREA*/}
                 <div className='flex flex-col gap-5 items-start lg:flex-row lg:items-center'>
 
-                    <Link href={'/home'}><img src={'/LogoandLogotype.svg'}  className='h-8' alt=""/></Link>
+                    <Link href={'/'}><img src={'/LogoandLogotype.svg'}  className='h-8' alt=""/></Link>
                     {/*NAVBAR SEARCH*/}
                     <form onSubmit={searchButtonHandler} action='#'  className={isMenuOpen ? 'flex gap-3' : 'hidden lg:flex lg:gap-3 '}>
                         <div className={isMenuOpen ? 'relative w-full' : 'hidden lg:block lg:relative '}>
@@ -63,14 +64,14 @@ function Navbar({setIsMenuOpen, isMenuOpen}) {
                     {/*NAVBAR LINK*/}
                     <div className={isMenuOpen ? 'flex flex-col gap-1 w-full' : 'hidden lg:block lg:flex-row lg:flex lg:gap-4'}>
                         <div className='w-full'>
-                            <Link href={'/home'} onClick={navbtnClickedHandler} className={
+                            <Link href={'/'} onClick={navbtnClickedHandler} className={
                                 `flex items-center  py-2 px-3 w-full gap-3 text-text-md font-semibold text-gray-700 hover:bg-gray-50 hover:text-gray-900 ${router.pathname=='/' && 'bg-gray-50 text-gray-900'}`
 }>
                                 Home
                             </Link>
                         </div>
                         <div className='w-full'>
-                            <Link  href={'/explore'}  onClick={navbtnClickedHandler} className={
+                            <Link  href={'/explore-movie'}  onClick={navbtnClickedHandler} className={
                                 `flex items-center  py-2 px-3 w-full gap-3 text-text-md font-semibold text-gray-500 hover:bg-gray-50 hover:text-gray-900 ${router.pathname=='/explore' && 'bg-gray-50 text-gray-900'}`
                             }>
                                 Explore

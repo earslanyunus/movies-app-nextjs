@@ -1,11 +1,10 @@
 import { getPopularMovies, getTopRatedMovies, getUpcomingMovies } from "@/utils/MovieDb";
 import PerView from "@/components/PerView.js";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/Navbar.js";
 
-function index({popularMovies,topRatedMovies,upcomingMovies}) {
+function Index({popularMovies,topRatedMovies,upcomingMovies}) {
   return (
     <div>
-        <Navbar/>
 
     <div className='h-[40vh] flex flex-col min-h-[25rem]'>
         <p className='container mx-auto text-display-md  font-semibold text-gray-900 mb-3'>Popular Movies</p>
@@ -36,4 +35,4 @@ export async function getServerSideProps(){
     }
 
 }
-export default index
+export default Index
