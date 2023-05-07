@@ -23,6 +23,7 @@ const firebaseConfig={
     measurementId:process.env.FIREBASE_MEASUREMENT_ID
 
 }
+console.log(process.env.TEST);
 
 
 
