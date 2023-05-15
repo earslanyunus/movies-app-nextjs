@@ -18,12 +18,12 @@ const Id = ({movieDetail,similarMovies}) => {
   const [movie, setMovie] = useState(null);
 
 
-  const director = movie?.crew
+  const director = movieDetail?.crew
     .filter((crew) => crew.job === "Director")
     .map((crew) => crew.name)
     .join(", ");
 
-  const story = movie?.crew
+  const story = movieDetail?.crew
     .filter((crew) => crew.job === "Screenplay")
     .map((crew) => crew.name)
     .join(", ");
