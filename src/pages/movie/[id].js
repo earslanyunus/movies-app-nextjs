@@ -1,3 +1,8 @@
+// TODO : add interraction icon
+// TODO : create cast pages
+// TODO : Add arrow to the bottom of the cast slider
+
+
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
