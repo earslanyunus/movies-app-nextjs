@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper";
 import "swiper/css";
 import Link from "next/link";
+import Image from "next/image";
 
 function PerViewGlass({
   items,
@@ -45,9 +46,6 @@ function PerViewGlass({
                 <p className="text-display-xs font-semibold text-white">
                   {item?.name}
                 </p>
-                <button type={"button"} className="text-[1.5rem] text-white">
-                  {/* <MdArrowOutward /> */}
-                </button>
               </div>
               <p className="text-text-md font-semibold text-white">
                 {item?.character}
@@ -58,11 +56,21 @@ function PerViewGlass({
       </Swiper>
       {arrows && (
         <div className="flex gap-6 container mx-auto mt-3">
-          <button ref={leftArrow}>
-            {/* <img src={swiperLeftArrow} alt={"left arrow"} /> */}
+            <button ref={leftArrow}>
+              <Image
+                src="/carouse_left_arrow.svg"
+                alt={"left arrow"}
+                width={50}
+                height={50}
+              />
           </button>
-          <button ref={rightArrow}>
-            {/* <img src={swiperRightArrow} alt={"right arrow"} /> */}
+            <button ref={rightArrow}>
+              <Image
+                src="/carouse_right_arrow.svg"
+                alt={"right arrow"}
+                width={50}
+                height={50}
+              />
           </button>
         </div>
       )}
