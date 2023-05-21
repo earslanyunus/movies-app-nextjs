@@ -4,7 +4,7 @@ import {getDiscoverMovies} from "../utils/MovieDb.js";
 import MovieCard from "../components/MovieCard";
 
 export default function ExploreMovie() {
-  const [year, setYear] = React.useState(2021);
+  const [year, setYear] = React.useState();
   const [point, setPoint] = React.useState('default');
   const [movies, setMovies] = React.useState([]);
   const pointHandler = (e) => {
@@ -27,7 +27,7 @@ export default function ExploreMovie() {
               {/*    input areas*/}
               <div className='flex flex-col gap-6 md:flex-row justify-between  items-center justify-center'>
                   <div className='w-full md:w-auto'>
-                  <input  type="number" name="" id="" className='input-text mb-3' value={year} onChange={yearHandler}/>
+                  <input  type="number" name="" id="" className='input-text mb-3' value={year} onChange={yearHandler} placeholder='Please enter the year'/>
                   <select title={'select'} placeholder={'test'} className='select-input' value={point} onChange={pointHandler}>
                       <option disabled  value="default">Please select point</option>
                       <option value="1">1</option>
