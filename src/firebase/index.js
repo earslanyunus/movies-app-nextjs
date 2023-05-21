@@ -168,16 +168,18 @@ const addNewBookmark = async ({ title, id,image }) => {
 
 
 
-        const userDocRef = doc(db, 'users', uid);
-        const bookmarksCollectionRef = collection(userDocRef, 'bookmarks');
-        const bookmarkDocRef = doc(bookmarksCollectionRef, title);
-        await setDoc(bookmarkDocRef, {});
-        const moviesCollectionRef = collection(bookmarkDocRef, 'movies');
-        const movieData={
-            id,
-            image
-        }
-        await addDoc(moviesCollectionRef, movieData);
+
+
+        // const userDocRef = doc(db, 'users', uid);
+        // const bookmarksCollectionRef = collection(userDocRef, 'bookmarks');
+        // const bookmarkDocRef = doc(bookmarksCollectionRef, title);
+        // await setDoc(bookmarkDocRef, {});
+        // const moviesCollectionRef = collection(bookmarkDocRef, 'movies');
+        // const movieData={
+        //     id,
+        //     image
+        // }
+        // await addDoc(moviesCollectionRef, movieData);
 
     } catch (e) {
         throw e;
@@ -208,6 +210,58 @@ const getBookmarks = async () => {
 
 
 }
+const addLikedMovie = async ({ title,id,image }) => {
+    try {
+        const user = auth.currentUser;
+        const { uid } = user;
+        if (!uid) {
+            throw new Error('User is not signed in');
+        }else{
+            // if collection contain same title dont add
+            if (title){
+                const userDocRef = doc(db, 'users', uid);
+                const likedMoviesCollectionRef = collection(userDocRef, 'likedMovies');
+                const likedMovieDocRef = doc(likedMoviesCollectionRef, title);
+                const likedMovieSnapshot = await getDoc(likedMovieDocRef);
+                if (likedMovieSnapshot.exists()) {
+                    throw new Error('Movie already exist');
+                    return null
+                } else {
+                    await setDoc(likedMovieDocRef, {id,image});
+                }
+            }
+
+        }
+        
+        
+    } catch (e) {
+        throw e;
+    }
+};
+const getLikedMovies = async () => {
+    try{
+        if (!auth.currentUser) {
+            throw new Error('User is not signed in');
+        }else{
+
+        const user = auth.currentUser;
+        const { uid } = user;
+        const userDocRef = doc(db, 'users', uid);
+        const likedMoviesCollectionRef = collection(userDocRef, 'likedMovies');
+        const likedMoviesSnapshot = await getDocs(likedMoviesCollectionRef);
+        return likedMoviesSnapshot.docs.map((movieDoc) => {
+            return { id: movieDoc.id, ...movieDoc.data() };
+        });
+    }
+    }
+    catch (e) {
+        throw e;
+    }
+}
+
+            
 
 
-export { signUp,signupWithGoogle ,signOut,signIn,signInWithGoogle,getProfilePicture,getUserDataWithUidOnFirestore,addNewBookmark,getBookmarks}
+
+
+export { signUp,signupWithGoogle ,signOut,signIn,signInWithGoogle,getProfilePicture,getUserDataWithUidOnFirestore,addNewBookmark,getBookmarks,addLikedMovie,getLikedMovies}
