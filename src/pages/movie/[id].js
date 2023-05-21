@@ -1,27 +1,24 @@
-// TODO : add interraction icon
-// TODO : create cast pages
-// TODO : Add arrow to the bottom of the cast slider
-
-
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { AiOutlineHeart } from "react-icons/ai";
+import { BsBookmarkPlus } from "react-icons/bs";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 import { getMovieDetail, getSimilarMovies } from "../../utils/MovieDb.js";
-
 
 import PerViewGlass from "../../components/PerViewGlass.js";
 
 import PerView from "../../components/PerView.js";
 
+import { addLikedMovie, addNewBookmark } from "../../firebase/index.js";
 
-import { addNewBookmark } from "../../firebase/index.js";
-
-const Id = ({movieDetail,similarMovies}) => {
+const Id = ({ movieDetail, similarMovies }) => {
   const router = useRouter();
   const { id } = router.query;
 
   const [movie, setMovie] = useState(null);
-
 
   const director = movieDetail?.crew
     .filter((crew) => crew.job === "Director")
@@ -33,23 +30,36 @@ const Id = ({movieDetail,similarMovies}) => {
     .map((crew) => crew.name)
     .join(", ");
 
-
   const bookmarkHandler = async () => {
-    await addNewBookmark({
-      title: "sevdigim_Filmler",
-      id: movie.id,
-      image: movie.poster_path,
-    });
+    // await addNewBookmark({
+    //   title: "sevdigim_Filmler",
+    //   id: movie.id,
+    //   image: movie.poster_path,
+    // });
+  };
+  const likeHandler = async () => {
+    try {
+      await addLikedMovie({
+        id: movieDetail.id,
+        image: movieDetail.poster_path,
+        title: movieDetail.title,
+      });
+      toast.success("Movie added to your liked list");
+    } catch (e) {
+      toast.error(`Error: ${e.message}`);
+
+      console.log(e);
+    }
   };
 
   return (
     <div className="container flex flex-col">
-        {/*IMAGE AND INFO*/}
+              <ToastContainer />
+
+      {/*IMAGE AND INFO*/}
       <div className="flex flex-col md:flex-row">
         {/*IMAGE AREA*/}
         <div className="flex flex-col md:w-1/3 md:h-full">
-
-
           <img
             className="w-full"
             src={`https://image.tmdb.org/t/p/original/${movieDetail?.poster_path}`}
@@ -84,21 +94,24 @@ const Id = ({movieDetail,similarMovies}) => {
           </div>
           {/*INTERRACTION AREA*/}
           <div className="flex justify-center gap-6 md:justify-start mt-6">
-            <button className="border-2  border-gray-300 hover:bg-gray-50  rounded-lg text-gray-700 hover:text-gray-800 text-[20px] p-2">
-              {/* <MdFavoriteBorder /> */}
-            </button>
-            <button className="border-2  border-gray-300 hover:bg-gray-50  rounded-lg text-gray-700 hover:text-gray-800 text-[20px] p-2">
-              {/* <TbPlayerPlay /> */}
-            </button>
             <button
+              onClick={likeHandler}
+              className="border-2  border-gray-300 hover:bg-gray-50  rounded-lg text-gray-700 hover:text-gray-800 text-[20px] p-2"
+            >
+              <AiOutlineHeart />
+            </button>
+            <button className="border-2  border-gray-300 hover:bg-gray-50  rounded-lg text-gray-700 hover:text-gray-800 text-[20px] p-2">
+              <BsBookmarkPlus />
+            </button>
+            {/* <button
               className="border-2  border-gray-300 hover:bg-gray-50  rounded-lg text-gray-700 hover:text-gray-800 text-[20px] p-2"
               onClick={bookmarkHandler}
-            >
-              {/* <MdBookmarkBorder /> */}
-            </button>
-            <button className="border-2  border-gray-300 hover:bg-gray-50  rounded-lg text-gray-700 hover:text-gray-800 text-[20px] p-2">
-              {/* <MdStarOutline /> */}
-            </button>
+            > */}
+            {/* <MdBookmarkBorder /> */}
+            {/* </button> */}
+            {/* <button className="border-2  border-gray-300 hover:bg-gray-50  rounded-lg text-gray-700 hover:text-gray-800 text-[20px] p-2"> */}
+            {/* <MdStarOutline /> */}
+            {/* </button> */}
           </div>
           {/*SHORT INFO*/}
           <div className="mt-6 flex flex-col gap-3">
@@ -144,7 +157,7 @@ const Id = ({movieDetail,similarMovies}) => {
           />
         </div>
         {/*SIMILAR SWIPER*/}
-        <div className="mt-6  flex flex-col h-[50vh] min-h-[450px] max-h-[600px]">
+        <div className="mt-6 mb-4 flex flex-col h-[50vh] min-h-[450px] max-h-[600px]">
           <p className="text-display-md font-semibold text-gray-700">Similar</p>
           <PerView
             isReload={true}
@@ -154,19 +167,8 @@ const Id = ({movieDetail,similarMovies}) => {
             items={similarMovies}
           />
         </div>
-        {/*COMMENT SECTION*/}
-        <div className="mt-6">
-          <p className="text-display-md font-semibold text-gray-700">
-            Comments
-          </p>
-
-          {/* <CommentList /> */}
-        </div>
       </div>
-
-
     </div>
-    
   );
 };
 
@@ -177,7 +179,8 @@ export const getServerSideProps = async (context) => {
 
   return {
     props: {
-        movieDetail,similarMovies
+      movieDetail,
+      similarMovies,
     },
   };
 };
