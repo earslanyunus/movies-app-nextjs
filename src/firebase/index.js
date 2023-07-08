@@ -238,26 +238,28 @@ const addLikedMovie = async ({ title,id,image }) => {
         throw e;
     }
 };
-const getLikedMovies = async () => {
-    try{
-        if (!auth.currentUser) {
-            throw new Error('User is not signed in');
-        }else{
-
+const getLikedMovies = async (uid) => {
+    try {
         const user = auth.currentUser;
-        const { uid } = user;
-        const userDocRef = doc(db, 'users', uid);
-        const likedMoviesCollectionRef = collection(userDocRef, 'likedMovies');
-        const likedMoviesSnapshot = await getDocs(likedMoviesCollectionRef);
-        return likedMoviesSnapshot.docs.map((movieDoc) => {
-            return { id: movieDoc.id, ...movieDoc.data() };
-        });
+      
+      
+      if (!user) {
+        console.log(user);
+        throw new Error('User is not signed in');
+      }
+  
+      const userDocRef = doc(db, 'users', uid);
+      const likedMoviesCollectionRef = collection(userDocRef, 'likedMovies');
+      const likedMoviesSnapshot = await getDocs(likedMoviesCollectionRef);
+  
+      return likedMoviesSnapshot.docs.map((movieDoc) => {
+        return { id: movieDoc.id, ...movieDoc.data() };
+      });
+    } catch (e) {
+      throw e;
     }
-    }
-    catch (e) {
-        throw e;
-    }
-}
+  }
+  
 
             
 

@@ -12,13 +12,18 @@ import PerViewGlass from "../../components/PerViewGlass.js";
 
 import PerView from "../../components/PerView.js";
 
-import { addLikedMovie, addNewBookmark } from "../../firebase/index.js";
+import { addLikedMovie, addNewBookmark, getLikedMovies } from "../../firebase/index.js";
+import store from "@/store/index.js";
+import { useSelector } from "react-redux";
 
 const Id = ({ movieDetail, similarMovies }) => {
+
   const router = useRouter();
   const { id } = router.query;
 
   const [movie, setMovie] = useState(null);
+  const [likedMovies, setLikedMovies] = useState(null);
+  const user = useSelector((state)=>state?.auth?.user)
 
   const director = movieDetail?.crew
     .filter((crew) => crew.job === "Director")
@@ -51,6 +56,13 @@ const Id = ({ movieDetail, similarMovies }) => {
       console.log(e);
     }
   };
+  useEffect(() => {
+    getLikedMovies(user?.uid).then((movies) => {
+      setLikedMovies(movies);
+    }
+    );
+
+  },[]);
 
   return (
     <div className="container flex flex-col">
@@ -180,7 +192,8 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       movieDetail,
-      similarMovies,
+      similarMovies
+      
     },
   };
 };

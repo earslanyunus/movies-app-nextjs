@@ -35,8 +35,9 @@ function Navbar({setIsMenuOpen, isMenuOpen}) {
         setSearch(e.target.value)
     }
     const searchButtonHandler = (e) => {
-        e.preventDefault()``
+        e.preventDefault()
         router.push(`/search/${search}`)
+        setSearch('')
         // setIsMenuOpen(false)
     }
     const navbtnClickedHandler = () => {
